@@ -1,5 +1,7 @@
+import ipaddress
 import pathlib
 
+import deploy_base.model
 import pydantic
 
 REPO_PREFIX = 'deploy-'
@@ -27,8 +29,38 @@ class PulumiSecret(StrictBaseModel):
         return str(self.secure)
 
 
+class ProxmoxConfig(StrictBaseModel):
+    api_token: deploy_base.model.OnePasswordRef = pydantic.Field(alias='api-token')
+    api_endpoint: str = pydantic.Field(alias='api-endpoint')
+    node_name: str = pydantic.Field(alias='node-name')
+    insecure: bool = False
+
+
+class DiskConfig(StrictBaseModel):
+    size: int
+
+
+class TalosInstanceConfig(StrictBaseModel):
+    nodes: int = 1
+    cores: int
+    memory_min: int = pydantic.Field(alias='memory-min')
+    memory_max: int = pydantic.Field(alias='memory-max')
+    disks: list[DiskConfig]
+    start_address: ipaddress.IPv4Address = pydantic.Field(alias='start-address')
+
+
+class TalosConfig(StrictBaseModel):
+    version: str
+    vlan: int | None = None
+    control_plane: TalosInstanceConfig = pydantic.Field(alias='control-plane')
+    cluster_endpoint_address: str = pydantic.Field(alias='cluster-endpoint-address')
+    worker: TalosInstanceConfig
+    network: ipaddress.IPv4Network
+
+
 class ComponentConfig(StrictBaseModel):
-    pass
+    proxmox: ProxmoxConfig
+    talos: TalosConfig
 
 
 class StackConfig(StrictBaseModel):
