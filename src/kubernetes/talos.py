@@ -7,6 +7,7 @@ import pulumi_proxmoxve as proxmoxve
 import pulumiverse_talos as talos
 
 from kubernetes.config import ComponentConfig
+from kubernetes.sleep_provider import SleepResource
 
 SCHEMATIC = """
 customization:
@@ -367,13 +368,16 @@ def create_talos(component_config: ComponentConfig, proxmox_provider: proxmoxve.
             )
         )
 
+    # Hack to delay bootstrap until all configurations are applied
+    sleep_resource = SleepResource('sleep', 60, opts=p.ResourceOptions(depends_on=applied))
+
     talos.machine.Bootstrap(
         'bootstrap',
         node=str(talos_config.control_plane.start_address),
         client_configuration=_get_client_configuration_as(
             secrets.client_configuration, talos.machine.ClientConfigurationArgs
         ),
-        opts=p.ResourceOptions(depends_on=applied),
+        opts=p.ResourceOptions(depends_on=[sleep_resource]),
     )
 
     kube_config = talos.cluster.get_kubeconfig_output(
