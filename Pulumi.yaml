@@ -1,4 +1,7 @@
 name: kubernetes
+pulumi:disable-default-providers:
+  - kubernetes
+  - proxmoxve
 runtime:
   name: python
   options:

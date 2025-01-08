@@ -1,2 +1,29 @@
 config:
-  kubernetes:config: {}
+  kubernetes:config:
+    proxmox:
+      api-token:
+        ref: "op://Pulumi/cejfwasemie3kbbfphb5zta2ci/password"
+      api-endpoint: "https://pve.tobiash.net:8006"
+      node-name: pve
+      insecure: true
+    talos:
+      version: v1.9.1
+      vlan: 40
+      cluster-endpoint-address: talos-test.tobiash.net
+      network: 192.168.40.0/24
+      control-plane:
+        cores: 2
+        memory-min: 512
+        memory-max: 2048
+        disks:
+          - size: 16
+        start-address: 192.168.40.41
+      worker:
+        cores: 2
+        memory-min: 512
+        memory-max: 2048
+        disks:
+          - size: 20
+          # Data disk
+          - size: 30
+        start-address: 192.168.40.51
