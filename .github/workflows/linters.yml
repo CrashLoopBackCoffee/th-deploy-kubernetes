@@ -14,7 +14,18 @@ jobs:
       matrix:
         python-version: ["3.11"]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          path: deploy-kubernetes
+
+      - name: Checkout base repo
+        uses: actions/checkout@v4
+        with:
+          repository: CrashLoopBackCoffee/th-deploy-base
+          ref: main
+          path: deploy-base
+          token: ${{ secrets.REPOS_READ_ONLY }}
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
@@ -25,16 +36,18 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Install dependencies
+        working-directory: deploy-kubernetes
         run: |
-          python -m pip install --upgrade pip poetry
           uv sync
 
       - name: Install grafana alloy
+        working-directory: deploy-kubernetes
         run: |
           wget -q https://github.com/grafana/alloy/releases/download/${ALLOY_VERSION}/alloy-boringcrypto-linux-amd64.zip
           unzip alloy-boringcrypto-linux-amd64.zip
           sudo mv alloy-boringcrypto-linux-amd64 /usr/local/bin/alloy
 
       - name: Running checks
+        working-directory: deploy-kubernetes
         run: |
           uv run pre-commit run --all-files --show-diff-on-failure
