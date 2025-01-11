@@ -40,6 +40,11 @@ class DiskConfig(StrictBaseModel):
     size: int
 
 
+class MetallbConfig(StrictBaseModel):
+    start: ipaddress.IPv4Address
+    end: ipaddress.IPv4Address
+
+
 class MicroK8sInstanceConfig(StrictBaseModel):
     name: str
     cores: int
@@ -57,6 +62,7 @@ class MicroK8sConfig(StrictBaseModel):
     )
     ssh_public_key: str = pydantic.Field(alias='ssh-public-key')
     master_nodes: list[MicroK8sInstanceConfig] = pydantic.Field(alias='master-nodes')
+    metallb: MetallbConfig
     version: str
 
 

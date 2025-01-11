@@ -164,7 +164,14 @@ def create_microk8s(
         add_previous_output_in_env=False,
         create=f'sudo snap refresh microk8s --channel {component_config.microk8s.version}',
         triggers=[get_snap_version('microk8s', component_config.microk8s.version, 'amd64')],
-        opts=p.ResourceOptions(additional_secret_outputs=['stdout']),
+    )
+
+    # Install MetalLB
+    command.remote.Command(
+        f'{vm_config.name}-metallb',
+        connection=connection_args,
+        add_previous_output_in_env=False,
+        create=f'microk8s enable metallb:{component_config.microk8s.metallb.start}-{component_config.microk8s.metallb.end}',
     )
 
     # export to kube config with
