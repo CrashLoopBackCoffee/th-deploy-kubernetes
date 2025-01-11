@@ -28,3 +28,5 @@ config:
           memory-max: 4096
           disks:
             - size: 20
+            # Data disk
+            - size: 20
