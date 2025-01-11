@@ -40,27 +40,29 @@ class DiskConfig(StrictBaseModel):
     size: int
 
 
-class TalosInstanceConfig(StrictBaseModel):
-    nodes: int = 1
+class MicroK8sInstanceConfig(StrictBaseModel):
+    name: str
     cores: int
     memory_min: int = pydantic.Field(alias='memory-min')
     memory_max: int = pydantic.Field(alias='memory-max')
     disks: list[DiskConfig]
-    start_address: ipaddress.IPv4Address = pydantic.Field(alias='start-address')
+    address: ipaddress.IPv4Interface
 
 
-class TalosConfig(StrictBaseModel):
-    version: str
+class MicroK8sConfig(StrictBaseModel):
     vlan: int | None = None
-    control_plane: TalosInstanceConfig = pydantic.Field(alias='control-plane')
-    cluster_endpoint_address: str = pydantic.Field(alias='cluster-endpoint-address')
-    worker: TalosInstanceConfig
-    network: ipaddress.IPv4Network
+    cloud_image: str = pydantic.Field(
+        alias='cloud-image',
+        default='https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img',
+    )
+    ssh_public_key: str = pydantic.Field(alias='ssh-public-key')
+    master_nodes: list[MicroK8sInstanceConfig] = pydantic.Field(alias='master-nodes')
+    version: str
 
 
 class ComponentConfig(StrictBaseModel):
     proxmox: ProxmoxConfig
-    talos: TalosConfig
+    microk8s: MicroK8sConfig
 
 
 class StackConfig(StrictBaseModel):
