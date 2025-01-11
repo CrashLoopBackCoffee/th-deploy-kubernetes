@@ -66,7 +66,23 @@ class MicroK8sConfig(StrictBaseModel):
     version: str
 
 
+class CertManagerConfig(StrictBaseModel):
+    use_staging: bool = False
+
+    @property
+    def issuer_server(self):
+        return (
+            'https://acme-staging-v02.api.letsencrypt.org/directory'
+            if self.use_staging
+            else 'https://acme-v02.api.letsencrypt.org/directory'
+        )
+
+
 class ComponentConfig(StrictBaseModel):
+    cert_manager: CertManagerConfig = pydantic.Field(
+        alias='cert-manager', default=CertManagerConfig()
+    )
+    cloudflare: deploy_base.model.CloudflareConfig
     proxmox: ProxmoxConfig
     microk8s: MicroK8sConfig
 

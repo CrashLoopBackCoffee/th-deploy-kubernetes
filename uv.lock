@@ -275,6 +275,7 @@ dependencies = [
     { name = "pulumi" },
     { name = "pulumi-cloudflare" },
     { name = "pulumi-command" },
+    { name = "pulumi-kubernetes" },
     { name = "pulumi-onepassword" },
     { name = "pulumi-proxmoxve" },
     { name = "pulumiverse-talos" },
@@ -302,6 +303,7 @@ requires-dist = [
     { name = "pulumi", specifier = "==3.144.1" },
     { name = "pulumi-cloudflare", specifier = ">=5.44.0" },
     { name = "pulumi-command", specifier = ">=1.0.1" },
+    { name = "pulumi-kubernetes", specifier = ">=4.19.0" },
     { name = "pulumi-onepassword", specifier = ">=1.1.3" },
     { name = "pulumi-proxmoxve", specifier = ">=6.18.0" },
     { name = "pulumiverse-talos", specifier = ">=0.5.1" },
@@ -463,6 +465,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/dd/c0/a6304d7697a22cec1f71101613eb81fe5f98549c36040d40a5d0a9cc759e/pulumi_command-1.0.1.tar.gz", hash = "sha256:58e123707956aa7a9be2ce89c009642539cde5d9fa02e1e10501662600894843", size = 31532 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ad/f1/a7616bc13081a110d8c2d0fe26c42249735154fa2732c86fab9ef8de0844/pulumi_command-1.0.1-py3-none-any.whl", hash = "sha256:672cdea9c0ced0f79ed47e578267a2b2160dcf88626dde34ee96f5524a003574", size = 34742 },
+]
+
+[[package]]
+name = "pulumi-kubernetes"
+version = "4.19.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "parver" },
+    { name = "pulumi" },
+    { name = "requests" },
+    { name = "semver" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/58/8c/f2edc860c2240c791a7db675c87418f4d54e9372afb009f3140f946b2b72/pulumi_kubernetes-4.19.0.tar.gz", hash = "sha256:648a065dc85916da2cee3f763328c72df41ba263742293760552e3e8aa1dfe54", size = 1656335 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/04/a9/de01bd9a41f732a60e30f0788a8fc637ebb15d66997b2981b3ba77863c68/pulumi_kubernetes-4.19.0-py3-none-any.whl", hash = "sha256:eed1986924debf092bb9187aab2adbd5b6cc61513fc0707974944e42e139633f", size = 2613078 },
 ]
 
 [[package]]
