@@ -172,6 +172,7 @@ def create_microk8s(
         connection=connection_args,
         add_previous_output_in_env=False,
         create=f'microk8s enable metallb:{component_config.microk8s.metallb.start}-{component_config.microk8s.metallb.end}',
+        delete='microk8s disable metallb',
     )
 
     # export to kube config with
