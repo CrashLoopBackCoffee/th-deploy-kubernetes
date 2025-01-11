@@ -4,6 +4,7 @@ import pulumi_proxmoxve as proxmoxve
 import yaml
 
 from kubernetes.config import ComponentConfig
+from kubernetes.snap import get_snap_version
 
 
 def _get_cloud_config(hostname: str, username: str, ssh_public_key: str) -> str:
@@ -91,6 +92,8 @@ def create_microk8s(
         {'vlan_id': component_config.microk8s.vlan} if component_config.microk8s.vlan else {}
     )
 
+    p.export('microk8s-version', get_snap_version('microk8s', '1.31/stable', 'amd64'))
+
     gateway_address = str(vm_config.address.network.network_address + 1)
     master_vm = proxmoxve.vm.VirtualMachine(
         vm_config.name,
@@ -160,7 +163,7 @@ def create_microk8s(
         connection=connection_args,
         add_previous_output_in_env=False,
         create=f'sudo snap refresh microk8s --channel {component_config.microk8s.version}',
-        triggers=[component_config.microk8s.version],
+        triggers=[get_snap_version('microk8s', component_config.microk8s.version, 'amd64')],
         opts=p.ResourceOptions(additional_secret_outputs=['stdout']),
     )
 
