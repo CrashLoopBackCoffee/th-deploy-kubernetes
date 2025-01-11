@@ -181,6 +181,8 @@ def create_microk8s(
             'user_data_file_id': cloud_config.id,
         },
         stop_on_destroy=True,
+        on_boot=True if p.get_stack() == 'prod' else False,
+        protection=True if p.get_stack() == 'prod' else False,
         machine='q35',
         opts=p.ResourceOptions.merge(proxmox_opts, p.ResourceOptions(ignore_changes=['cdrom'])),
     )

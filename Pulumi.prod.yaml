@@ -18,7 +18,7 @@ config:
         start: 192.168.40.70
         end: 192.168.40.99
       master-nodes:
-        - name: microk8s-master-0
+        - name: microk8s-prod-master-0
           address: 192.168.40.10/24
           cores: 16
           memory-min: 4096

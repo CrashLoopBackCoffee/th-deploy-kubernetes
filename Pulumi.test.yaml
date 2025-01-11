@@ -21,7 +21,7 @@ config:
         start: 192.168.40.30
         end: 192.168.40.60
       master-nodes:
-        - name: microk8s-master-0
+        - name: microk8s-test-master-0
           address: 192.168.40.20/24
           cores: 2
           memory-min: 2048
