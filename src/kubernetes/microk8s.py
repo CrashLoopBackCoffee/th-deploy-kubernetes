@@ -40,9 +40,6 @@ def _get_cloud_config(hostname: str, username: str, ssh_public_key: str) -> str:
                 'apt-get update -y',
                 'apt-get upgrade -y',
                 f'DEBIAN_FRONTEND=noninteractive apt-get install -y {PACKAGES}',
-                # Disable swap
-                'swapoff -a',
-                "sed -i '/\\bswap\\b/ s/^\\(.*\\)$/#\1/' /etc/fstab",
                 # MicroK8s install
                 'snap install microk8s --classic',
                 f'usermod -a -G microk8s {username}',
