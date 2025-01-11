@@ -10,6 +10,9 @@ config:
       version: 1.31/stable
       vlan: 40
       ssh-public-key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFLGX6Nw50R8EGcDgR69SkvAgX/NR71vLHlYuB7lkyoJ
+      metallb:
+        start: 192.168.40.30
+        end: 192.168.40.60
       master-nodes:
         - name: microk8s-master-0
           address: 192.168.40.20/24
