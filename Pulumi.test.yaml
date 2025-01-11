@@ -2,10 +2,17 @@ config:
   kubernetes:config:
     proxmox:
       api-token:
-        ref: "op://Pulumi/cejfwasemie3kbbfphb5zta2ci/password"
-      api-endpoint: "https://pve.tobiash.net:8006"
+        ref: op://Pulumi/cejfwasemie3kbbfphb5zta2ci/password
+      api-endpoint: https://pve.tobiash.net:8006
       node-name: pve
       insecure: true
+    cert-manager:
+      use_staging: true
+    cloudflare:
+      api-key:
+        ref: op://Pulumi/Cloudflare Global API Key/password
+      email: tobias_henkel@gmx.de
+      zone: tobiash.net
     microk8s:
       version: 1.31/stable
       vlan: 40

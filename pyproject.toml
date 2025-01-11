@@ -17,6 +17,7 @@ dependencies = [
     "pulumiverse-talos>=0.5.1",
     "pulumi-command>=1.0.1",
     "requests>=2.32.3",
+    "pulumi-kubernetes>=4.19.0",
 ]
 
 [dependency-groups]

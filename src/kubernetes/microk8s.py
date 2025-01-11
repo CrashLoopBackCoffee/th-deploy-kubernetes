@@ -1,8 +1,11 @@
 import pulumi as p
+import pulumi_cloudflare as cloudflare
 import pulumi_command as command
+import pulumi_kubernetes as k8s
 import pulumi_proxmoxve as proxmoxve
 import yaml
 
+from kubernetes.certmanager import create_certmanager
 from kubernetes.config import ComponentConfig
 from kubernetes.snap import get_snap_version
 
@@ -58,7 +61,9 @@ def _get_cloud_config(hostname: str, username: str, ssh_public_key: str) -> str:
 
 
 def create_microk8s(
-    component_config: ComponentConfig, proxmox_provider: proxmoxve.Provider
+    component_config: ComponentConfig,
+    cloudflare_provider: cloudflare.Provider,
+    proxmox_provider: proxmoxve.Provider,
 ) -> None:
     proxmox_opts = p.ResourceOptions(provider=proxmox_provider)
 
@@ -157,6 +162,12 @@ def create_microk8s(
         opts=p.ResourceOptions(additional_secret_outputs=['stdout']),
     )
 
+    # Create kubernetes provider
+    k8s_provider = k8s.Provider(
+        'microk8s',
+        kubeconfig=kube_config_command.stdout,
+    )
+
     # Upgrade MicroK8s to the desired version
     command.remote.Command(
         f'{vm_config.name}-upgrade',
@@ -174,6 +185,8 @@ def create_microk8s(
         create=f'microk8s enable metallb:{component_config.microk8s.metallb.start}-{component_config.microk8s.metallb.end}',
         delete='microk8s disable metallb',
     )
+
+    create_certmanager(component_config, connection_args, cloudflare_provider, k8s_provider)
 
     # export to kube config with
     # p stack output --show-secrets k8s-master-0-dev-kube-config > ~/.kube/config
