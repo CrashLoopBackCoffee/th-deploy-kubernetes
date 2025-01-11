@@ -16,6 +16,7 @@ dependencies = [
     "pulumi-proxmoxve>=6.18.0",
     "pulumiverse-talos>=0.5.1",
     "pulumi-command>=1.0.1",
+    "requests>=2.32.3",
 ]
 
 [dependency-groups]
