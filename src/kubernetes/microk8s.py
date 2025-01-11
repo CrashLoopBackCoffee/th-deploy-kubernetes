@@ -23,6 +23,7 @@ def _get_cloud_config(hostname: str, username: str, ssh_public_key: str) -> str:
     )
     return '#cloud-config\n' + yaml.safe_dump(
         {
+            # User config
             'users': [
                 'default',
                 {
@@ -34,6 +35,28 @@ def _get_cloud_config(hostname: str, username: str, ssh_public_key: str) -> str:
                     'sudo': ['ALL=(ALL) NOPASSWD:ALL'],
                 },
             ],
+            # Disk config
+            'device_aliases': {
+                'data': '/dev/vdb',
+            },
+            'disk_setup': {
+                'data': {
+                    'table_type': 'gpt',
+                    'layout': True,
+                    'overwrite': False,
+                }
+            },
+            'fs_setup': [
+                {
+                    'label': 'data',
+                    'filesystem': 'ext4',
+                    'device': 'data',
+                }
+            ],
+            'mounts': [
+                ['LABEL=data', '/var/snap/microk8s/common/default-storage'],
+            ],
+            # Install packages and configure MicroK8s
             'runcmd': [
                 # System update and prep
                 f'hostnamectl set-hostname {hostname}',
@@ -113,17 +136,34 @@ def create_microk8s(
         },
         cdrom={'enabled': False},
         disks=[
+            # Root disk
             {
                 'interface': 'virtio0',
                 'size': vm_config.disks[0].size,
                 'file_id': cloud_image.id,
                 'iothread': True,
                 'discard': 'on',
+                'file_format': 'raw',
                 # Hack to avoid diff in subsequent runs
                 'speed': {
                     'read': 10000,
                 },
-            }
+            },
+            # Data disks
+            *[
+                {
+                    'interface': f'virtio{idx}',
+                    'size': disk.size,
+                    'iothread': True,
+                    'discard': 'on',
+                    'file_format': 'raw',
+                    # Hack to avoid diff in subsequent runs
+                    'speed': {
+                        'read': 10000,
+                    },
+                }
+                for idx, disk in enumerate(vm_config.disks[1:], start=1)
+            ],
         ],
         network_devices=[{'bridge': 'vmbr0', 'model': 'virtio', **vlan_config}],
         agent={'enabled': True},
@@ -184,6 +224,15 @@ def create_microk8s(
         add_previous_output_in_env=False,
         create=f'microk8s enable metallb:{component_config.microk8s.metallb.start}-{component_config.microk8s.metallb.end}',
         delete='microk8s disable metallb',
+    )
+
+    # Add hostpath storage
+    command.remote.Command(
+        f'{vm_config.name}-storage',
+        connection=connection_args,
+        add_previous_output_in_env=False,
+        create='microk8s enable hostpath-storage',
+        delete='microk8s disable hostpath-storage',
     )
 
     create_certmanager(component_config, connection_args, cloudflare_provider, k8s_provider)
