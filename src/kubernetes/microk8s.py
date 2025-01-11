@@ -93,8 +93,9 @@ def create_microk8s(
         datastore_id='local',
         node_name=component_config.proxmox.node_name,
         overwrite=False,
+        overwrite_unmanaged=True,
         url=component_config.microk8s.cloud_image,
-        opts=proxmox_opts,
+        opts=p.ResourceOptions.merge(proxmox_opts, p.ResourceOptions(retain_on_delete=True)),
     )
 
     vm_config = component_config.microk8s.master_nodes[0]

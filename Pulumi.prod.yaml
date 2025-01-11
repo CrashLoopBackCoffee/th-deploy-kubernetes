@@ -1,2 +1,29 @@
 config:
-  kubernetes:config: {}
+  kubernetes:config:
+    proxmox:
+      api-token:
+        ref: op://Pulumi/cejfwasemie3kbbfphb5zta2ci/password
+      api-endpoint: https://pve.tobiash.net:8006
+      node-name: pve
+    cloudflare:
+      api-key:
+        ref: op://Pulumi/Cloudflare Global API Key/password
+      email: tobias_henkel@gmx.de
+      zone: tobiash.net
+    microk8s:
+      version: 1.31/stable
+      vlan: 40
+      ssh-public-key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFLGX6Nw50R8EGcDgR69SkvAgX/NR71vLHlYuB7lkyoJ
+      metallb:
+        start: 192.168.40.70
+        end: 192.168.40.99
+      master-nodes:
+        - name: microk8s-master-0
+          address: 192.168.40.10/24
+          cores: 16
+          memory-min: 4096
+          memory-max: 32768
+          disks:
+            - size: 20
+            # Data disk
+            - size: 20
