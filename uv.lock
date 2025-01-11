@@ -208,6 +208,7 @@ dependencies = [
     { name = "pip" },
     { name = "pulumi" },
     { name = "pulumi-cloudflare" },
+    { name = "pulumi-command" },
     { name = "pulumi-onepassword" },
     { name = "pulumi-proxmoxve" },
     { name = "pulumiverse-talos" },
@@ -233,6 +234,7 @@ requires-dist = [
     { name = "pip", specifier = ">=24.3.1" },
     { name = "pulumi", specifier = "==3.144.1" },
     { name = "pulumi-cloudflare", specifier = ">=5.44.0" },
+    { name = "pulumi-command", specifier = ">=1.0.1" },
     { name = "pulumi-onepassword", specifier = ">=1.1.3" },
     { name = "pulumi-proxmoxve", specifier = ">=6.18.0" },
     { name = "pulumiverse-talos", specifier = ">=0.5.1" },
@@ -379,6 +381,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b1/fd/d7c2b17c41450873b773c3d2b84825e658673f870ce94020870c505ce0c6/pulumi_cloudflare-5.46.0.tar.gz", hash = "sha256:1bc3d485368586248e343794805b163e8e2bd7e17323d4bcc1f931e2c0285194", size = 591815 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/57/be/47b490bb3e0499d6230467258b55c43f24d6b1eec22dc47c7525285a187b/pulumi_cloudflare-5.46.0-py3-none-any.whl", hash = "sha256:fd97bbebc98c052605ef67819dda1822f2708765e8d41a87e171e87acae07346", size = 859067 },
+]
+
+[[package]]
+name = "pulumi-command"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "parver" },
+    { name = "pulumi" },
+    { name = "semver" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/dd/c0/a6304d7697a22cec1f71101613eb81fe5f98549c36040d40a5d0a9cc759e/pulumi_command-1.0.1.tar.gz", hash = "sha256:58e123707956aa7a9be2ce89c009642539cde5d9fa02e1e10501662600894843", size = 31532 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/f1/a7616bc13081a110d8c2d0fe26c42249735154fa2732c86fab9ef8de0844/pulumi_command-1.0.1-py3-none-any.whl", hash = "sha256:672cdea9c0ced0f79ed47e578267a2b2160dcf88626dde34ee96f5524a003574", size = 34742 },
 ]
 
 [[package]]

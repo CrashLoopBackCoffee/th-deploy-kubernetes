@@ -6,24 +6,15 @@ config:
       api-endpoint: "https://pve.tobiash.net:8006"
       node-name: pve
       insecure: true
-    talos:
-      version: v1.9.1
+    microk8s:
+      version: 1.31/stable
       vlan: 40
-      cluster-endpoint-address: talos-test.tobiash.net
-      network: 192.168.40.0/24
-      control-plane:
-        cores: 2
-        memory-min: 2048
-        memory-max: 4096
-        disks:
-          - size: 16
-        start-address: 192.168.40.41
-      worker:
-        cores: 2
-        memory-min: 2048
-        memory-max: 4096
-        disks:
-          - size: 20
-          # Data disk
-          - size: 30
-        start-address: 192.168.40.51
+      ssh-public-key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFLGX6Nw50R8EGcDgR69SkvAgX/NR71vLHlYuB7lkyoJ
+      master-nodes:
+        - name: microk8s-master-0
+          address: 192.168.40.20/24
+          cores: 2
+          memory-min: 2048
+          memory-max: 4096
+          disks:
+            - size: 20
