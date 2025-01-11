@@ -8,6 +8,7 @@ import yaml
 from kubernetes.certmanager import create_certmanager
 from kubernetes.config import ComponentConfig
 from kubernetes.snap import get_snap_version
+from kubernetes.util import stack_is_prod
 
 
 def _get_cloud_config(hostname: str, username: str, ssh_public_key: str) -> str:
@@ -181,8 +182,8 @@ def create_microk8s(
             'user_data_file_id': cloud_config.id,
         },
         stop_on_destroy=True,
-        on_boot=True if p.get_stack() == 'prod' else False,
-        protection=True if p.get_stack() == 'prod' else False,
+        on_boot=stack_is_prod(),
+        protection=stack_is_prod(),
         machine='q35',
         opts=p.ResourceOptions.merge(proxmox_opts, p.ResourceOptions(ignore_changes=['cdrom'])),
     )
