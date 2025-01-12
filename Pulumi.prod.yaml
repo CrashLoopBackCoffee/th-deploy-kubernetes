@@ -5,6 +5,10 @@ config:
         ref: op://Pulumi/cejfwasemie3kbbfphb5zta2ci/password
       api-endpoint: https://pve.tobiash.net:8006
       node-name: pve
+    cert-manager:
+      # renovate: datasource=github-releases packageName=cert-manager/cert-manager versioning=semver
+      version: v1.16.1
+      use_staging: false
     cloudflare:
       api-key:
         ref: op://Pulumi/Cloudflare Global API Key/password

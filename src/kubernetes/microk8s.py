@@ -234,7 +234,7 @@ def create_microk8s(
         delete='microk8s disable hostpath-storage',
     )
 
-    create_certmanager(component_config, connection_args, cloudflare_provider, k8s_provider)
+    create_certmanager(component_config, cloudflare_provider, k8s_provider)
 
     # export to kube config with
     # p stack output --show-secrets k8s-master-0-dev-kube-config > ~/.kube/config

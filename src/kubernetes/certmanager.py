@@ -1,6 +1,5 @@
 import pulumi as p
 import pulumi_cloudflare as cloudflare
-import pulumi_command as command
 import pulumi_kubernetes as k8s
 
 from kubernetes.config import ComponentConfig
@@ -8,17 +7,35 @@ from kubernetes.config import ComponentConfig
 
 def create_certmanager(
     component_config: ComponentConfig,
-    connection_args: command.remote.ConnectionArgs,
     cloudflare_provider: cloudflare.Provider,
     k8s_provider: k8s.Provider,
 ) -> None:
-    # Install cert-manager
-    cert_manager = command.remote.Command(
+    namespace = k8s.core.v1.Namespace(
         'cert-manager',
-        connection=connection_args,
-        add_previous_output_in_env=False,
-        create='microk8s enable cert-manager',
-        delete='microk8s disable cert-manager',
+        metadata={'name': 'cert-manager'},
+        opts=p.ResourceOptions(provider=k8s_provider),
+    )
+
+    namespaced_k8s_provider = k8s.Provider(
+        'cert-manager-provider',
+        kubeconfig=k8s_provider.kubeconfig,  # type: ignore
+        namespace=namespace.metadata['name'],
+    )
+    k8s_opts = p.ResourceOptions(provider=namespaced_k8s_provider)
+
+    # Note we use Release instead of Chart in order to have one resource instead of 25
+    chart = k8s.helm.v3.Release(
+        'cert-manager',
+        chart='cert-manager',
+        version=component_config.cert_manager.version,
+        namespace=namespace.metadata.name,
+        repository_opts={'repo': 'https://charts.jetstack.io'},
+        values={
+            'crds': {
+                'enabled': True,
+            },
+        },
+        opts=k8s_opts,
     )
 
     # Create scoped down cloudflare token
@@ -40,7 +57,7 @@ def create_certmanager(
         opts=p.ResourceOptions(provider=cloudflare_provider),
     )
 
-    k8s_opts = p.ResourceOptions(provider=k8s_provider, depends_on=[cert_manager])
+    k8s_opts = p.ResourceOptions(provider=k8s_provider, depends_on=[chart])
 
     # Cloudflare DNS API Secret
     cloudflare_secret = k8s.core.v1.Secret(
@@ -78,3 +95,18 @@ def create_certmanager(
         },
         opts=k8s_opts,
     )
+
+    # Test certificate
+    # ruff: noqa: ERA001
+    # k8s.apiextensions.CustomResource(
+    #     'certificate',
+    #     api_version='cert-manager.io/v1',
+    #     kind='Certificate',
+    #     metadata={'name': 'test-certificate'},
+    #     spec={
+    #         'secretName': 'test-certificate',
+    #         'dnsNames': ['validate-cert.tobiash.net'],
+    #         'issuerRef': {'name': 'lets-encrypt', 'kind': 'ClusterIssuer'},
+    #     },
+    #     opts=k8s_opts,
+    # )
