@@ -7,6 +7,7 @@ import yaml
 
 from kubernetes.certmanager import create_certmanager
 from kubernetes.config import ComponentConfig
+from kubernetes.metallb import create_metallb
 from kubernetes.snap import get_snap_version
 from kubernetes.util import stack_is_prod
 
@@ -222,13 +223,7 @@ def create_microk8s(
     )
 
     # Install MetalLB
-    command.remote.Command(
-        f'{vm_config.name}-metallb',
-        connection=connection_args,
-        add_previous_output_in_env=False,
-        create=f'microk8s enable metallb:{component_config.microk8s.metallb.start}-{component_config.microk8s.metallb.end}',
-        delete='microk8s disable metallb',
-    )
+    create_metallb(component_config, k8s_provider)
 
     # Add hostpath storage
     command.remote.Command(

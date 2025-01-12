@@ -41,6 +41,7 @@ class DiskConfig(StrictBaseModel):
 
 
 class MetallbConfig(StrictBaseModel):
+    version: str
     start: ipaddress.IPv4Address
     end: ipaddress.IPv4Address
 
