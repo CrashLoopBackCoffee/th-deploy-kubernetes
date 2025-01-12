@@ -68,6 +68,7 @@ class MicroK8sConfig(StrictBaseModel):
 
 
 class CertManagerConfig(StrictBaseModel):
+    version: str
     use_staging: bool = False
 
     @property
@@ -80,9 +81,7 @@ class CertManagerConfig(StrictBaseModel):
 
 
 class ComponentConfig(StrictBaseModel):
-    cert_manager: CertManagerConfig = pydantic.Field(
-        alias='cert-manager', default=CertManagerConfig()
-    )
+    cert_manager: CertManagerConfig = pydantic.Field(alias='cert-manager')
     cloudflare: deploy_base.model.CloudflareConfig
     proxmox: ProxmoxConfig
     microk8s: MicroK8sConfig
