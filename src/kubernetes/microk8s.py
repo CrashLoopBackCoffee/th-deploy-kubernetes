@@ -128,7 +128,10 @@ def create_microk8s(
         tags=tags,
         node_name=component_config.proxmox.node_name,
         description='MicroK8s Master',
-        cpu={'cores': vm_config.cores},
+        operating_system={
+            'type': 'l26',
+        },
+        cpu={'cores': vm_config.cores, 'type': 'host'},
         memory={
             'floating': vm_config.memory_min,
             'dedicated': vm_config.memory_max,
