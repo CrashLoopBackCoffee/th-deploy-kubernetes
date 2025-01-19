@@ -2,6 +2,7 @@ import pulumi as p
 import pulumi_cloudflare as cloudflare
 import pulumi_command as command
 import pulumi_kubernetes as k8s
+import pulumi_onepassword as onepassword
 import pulumi_proxmoxve as proxmoxve
 import yaml
 
@@ -239,3 +240,11 @@ def create_microk8s(
     # export to kube config with
     # p stack output --show-secrets k8s-master-0-dev-kube-config > ~/.kube/config
     p.export('kubeconfig', kube_config_command.stdout)
+
+    onepassword.Item(
+        's3-pulumi',
+        title=f'Kubeconfig {p.get_stack()}',
+        # Pulumi vault
+        vault='mf5hvtoot2hvdylkce6hxdpqmi',
+        password=kube_config_command.stdout,
+    )
