@@ -8,6 +8,7 @@ import yaml
 
 from kubernetes.certmanager import create_certmanager
 from kubernetes.config import ComponentConfig
+from kubernetes.csi_nfs import create_csi_nfs
 from kubernetes.metallb import create_metallb
 from kubernetes.snap import get_snap_version
 from kubernetes.util import stack_is_prod
@@ -234,6 +235,9 @@ def create_microk8s(
         create='microk8s enable hostpath-storage',
         delete='microk8s disable hostpath-storage',
     )
+
+    # Install csi-driver-nfs
+    create_csi_nfs(component_config, k8s_provider)
 
     create_certmanager(component_config, cloudflare_provider, k8s_provider)
 
