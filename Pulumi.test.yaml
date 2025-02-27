@@ -36,4 +36,4 @@ config:
             - size: 20
       csi-nfs-driver:
         # renovate: datasource=github-releases packageName=kubernetes-csi/csi-driver-nfs versioning=semver
-        version: v4.9.0
+        version: v4.10.0
