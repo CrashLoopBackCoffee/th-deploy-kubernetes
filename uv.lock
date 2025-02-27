@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.11"
 
 [[package]]
@@ -300,7 +301,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "pip", specifier = ">=24.3.1" },
-    { name = "pulumi", specifier = "==3.144.1" },
+    { name = "pulumi", specifier = "==3.153.0" },
     { name = "pulumi-cloudflare", specifier = ">=5.44.0" },
     { name = "pulumi-command", specifier = ">=1.0.1" },
     { name = "pulumi-kubernetes", specifier = ">=4.19.0" },
@@ -424,19 +425,20 @@ wheels = [
 
 [[package]]
 name = "pulumi"
-version = "3.144.1"
+version = "3.153.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "debugpy" },
     { name = "dill" },
     { name = "grpcio" },
+    { name = "pip" },
     { name = "protobuf" },
     { name = "pyyaml" },
     { name = "semver" },
     { name = "six" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1f/fa/b7cf13806d40fef559c2b3bff4c2d1402a15a453de8627df84b2d8c87adf/pulumi-3.144.1-py3-none-any.whl", hash = "sha256:42a7c66d81000874e0ec44bfaacfe56a0dbf5cc0060014b10d064e0bc01580f7", size = 294388 },
+    { url = "https://files.pythonhosted.org/packages/a8/67/63ed09035c0038427ce5cbda910a1e74c2c222b45b9e84daf5392adf71e8/pulumi-3.153.0-py3-none-any.whl", hash = "sha256:daebef24d0490f3e6709f846347c9faec7cd9767814295717df1df16c03c9b25", size = 324278 },
 ]
 
 [[package]]
