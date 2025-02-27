@@ -15,6 +15,9 @@ def create_csi_nfs(component_config: ComponentConfig, k8s_provider: k8s.Provider
         },
         values={
             'kubeletDir': '/var/snap/microk8s/common/var/lib/kubelet',
+            'feature': {
+                'enableInlineVolume': True,
+            },
         },
         opts=p.ResourceOptions(provider=k8s_provider),
     )
