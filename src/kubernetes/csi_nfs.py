@@ -9,7 +9,7 @@ def create_csi_nfs(component_config: ComponentConfig, k8s_provider: k8s.Provider
         'csi-driver-nfs',
         chart='csi-driver-nfs',
         namespace='kube-system',
-        version=component_config.microk8s.csi_nfs_driver.version,
+        version=component_config.csi_nfs_driver.version,
         repository_opts={
             'repo': 'https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts'
         },
