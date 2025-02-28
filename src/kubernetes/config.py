@@ -68,7 +68,6 @@ class MicroK8sConfig(StrictBaseModel):
     ssh_public_key: str = pydantic.Field(alias='ssh-public-key')
     master_nodes: list[MicroK8sInstanceConfig] = pydantic.Field(alias='master-nodes')
     metallb: MetallbConfig
-    csi_nfs_driver: NfsCsiDriverConfig = pydantic.Field(alias='csi-nfs-driver')
     version: str
 
 
@@ -90,6 +89,7 @@ class ComponentConfig(StrictBaseModel):
     cloudflare: deploy_base.model.CloudflareConfig
     proxmox: ProxmoxConfig
     microk8s: MicroK8sConfig
+    csi_nfs_driver: NfsCsiDriverConfig = pydantic.Field(alias='csi-nfs-driver')
 
 
 class StackConfig(StrictBaseModel):
