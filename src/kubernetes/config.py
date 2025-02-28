@@ -50,6 +50,10 @@ class NfsCsiDriverConfig(StrictBaseModel):
     version: str
 
 
+class TraeficConfig(StrictBaseModel):
+    version: str
+
+
 class MicroK8sInstanceConfig(StrictBaseModel):
     name: str
     cores: int
@@ -90,6 +94,7 @@ class ComponentConfig(StrictBaseModel):
     proxmox: ProxmoxConfig
     microk8s: MicroK8sConfig
     csi_nfs_driver: NfsCsiDriverConfig = pydantic.Field(alias='csi-nfs-driver')
+    traefik: TraeficConfig
 
 
 class StackConfig(StrictBaseModel):

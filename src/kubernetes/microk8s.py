@@ -11,6 +11,7 @@ from kubernetes.config import ComponentConfig
 from kubernetes.csi_nfs import create_csi_nfs
 from kubernetes.metallb import create_metallb
 from kubernetes.snap import get_snap_version
+from kubernetes.traefik import create_traefik
 from kubernetes.util import stack_is_prod
 
 
@@ -239,7 +240,9 @@ def create_microk8s(
     # Install csi-driver-nfs
     create_csi_nfs(component_config, k8s_provider)
 
-    create_certmanager(component_config, cloudflare_provider, k8s_provider)
+    issuer = create_certmanager(component_config, cloudflare_provider, k8s_provider)
+
+    create_traefik(component_config, issuer, k8s_provider)
 
     # export to kube config with
     # p stack output --show-secrets k8s-master-0-dev-kube-config > ~/.kube/config

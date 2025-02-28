@@ -9,7 +9,7 @@ def create_certmanager(
     component_config: ComponentConfig,
     cloudflare_provider: cloudflare.Provider,
     k8s_provider: k8s.Provider,
-) -> None:
+) -> k8s.apiextensions.CustomResource:
     namespace = k8s.core.v1.Namespace(
         'cert-manager',
         metadata={'name': 'cert-manager'},
@@ -69,7 +69,7 @@ def create_certmanager(
     )
 
     # Issuer
-    k8s.apiextensions.CustomResource(
+    return k8s.apiextensions.CustomResource(
         'letsencrypt-issuer',
         api_version='cert-manager.io/v1',
         kind='ClusterIssuer',
